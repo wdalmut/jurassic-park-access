@@ -30,29 +30,29 @@ struct transition {
     enum ret_codes   ret_code;
     enum state_codes dst_state;
 };
-typedef struct transition tran;
+typedef struct transition transition;
 
 //Transitions
-tran state_transitions[] = {
+transition state_transitions[] = {
     {entry,                 ok,     help},
     {entry,                 fail,   end},
     {security,              ok,     end},
     {security,              fail,   end},
     {security_grid,         ok,     end},
     {security_grid,         fail,   end},
-    {main_security_grid,     ok,     security_alarm},
-    {main_security_grid,     fail,   end},
+    {main_security_grid,    ok,     security_alarm},
+    {main_security_grid,    fail,   end},
     {security_alarm,        ok,     security_alarm},
-    {security_alarm,        fail,     security_alarm},
-    {help,                    ok,        end},
-    {help,                    fail,     end}
+    {security_alarm,        fail,   security_alarm},
+    {help,                  ok,     end},
+    {help,                  fail,   end}
 };
 
 // Check next steps
 int lookup_transitions(int current_state, int return_code)
 {
     int i;
-    for (i=0; i<12; i++) {
+    for (i=0; i<(sizeof(state_transitions)/sizeof(transition)); i++) {
         struct transition trans = state_transitions[i];
         if (trans.src_state == current_state && trans.ret_code == return_code) {
             return trans.dst_state;
